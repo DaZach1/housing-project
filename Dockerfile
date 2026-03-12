@@ -3,10 +3,9 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["HousingAPI2/HousingAPI/HousingAPI.csproj", "HousingAPI/"]
-RUN dotnet restore "HousingAPI/HousingAPI.csproj"
-COPY HousingAPI2/HousingAPI/ ./HousingAPI/
-WORKDIR "/src/HousingAPI"
+COPY . .
+RUN dotnet restore "HousingAPI2/HousingAPI/HousingAPI.csproj"
+WORKDIR "/src/HousingAPI2/HousingAPI"
 RUN dotnet build "HousingAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
