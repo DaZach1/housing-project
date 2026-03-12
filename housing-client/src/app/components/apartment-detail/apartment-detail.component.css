@@ -1,0 +1,42 @@
+/* Основные стили карточки */
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: 0.3s;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Стили для таблицы */
+.table-hover tbody tr:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Стили для формы */
+.form-control {
+  margin-bottom: 15px;
+}
+
+/* Стили для кнопок */
+.btn {
+  margin-right: 5px;
+}
+
+/* Сообщения */
+.alert {
+  margin-top: 15px;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 15px;
+  }
+  
+  .row > div {
+    margin-bottom: 15px;
+  }
+}

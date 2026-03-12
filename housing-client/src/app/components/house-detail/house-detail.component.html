@@ -1,0 +1,164 @@
+
+<div class="container mt-4">
+    <!-- Состояние загрузки -->
+    @if (isLoading) {
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+  
+    <!-- Состояние ошибки -->
+    @if (error && !isLoading) {
+      <div class="alert alert-danger">
+        {{ error }}
+        <a routerLink="/all-houses" class="alert-link">Back to list</a>
+      </div>
+    }
+  
+    <!-- Успешная загрузка -->
+    @if (house && !isLoading && !error) {
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="mb-0">
+            @if (isEditMode) {
+              Edit House
+            } @else {
+              House Details
+            }
+          </h2>
+          <div>
+            <button *appHasRole="['Manager']" [routerLink]="['/house', house.id, 'apartment', 'create']" class="btn btn-primary me-2">
+              New apartment
+            </button>
+            @if (!isEditMode) {
+              <button *appHasRole="['Manager']" (click)="toggleEditMode()" class="btn btn-primary me-2">
+                Edit
+              </button>
+            }
+            <a routerLink="/all-houses" class="btn btn-outline-secondary">
+              Back to list
+            </a>
+          </div>
+        </div>
+  
+        <div class="card-body">
+          <!-- Форма редактирования -->
+          @if (isEditMode) {
+            <form (ngSubmit)="saveChanges()">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Street</label>
+                    <input type="text" class="form-control" [(ngModel)]="editedHouse.street" name="street" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Number</label>
+                    <input type="number" class="form-control" [(ngModel)]="editedHouse.number" name="number" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" [(ngModel)]="editedHouse.city" name="city" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" [(ngModel)]="editedHouse.postalCode" name="postalCode" required>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="button" (click)="toggleEditMode()" class="btn btn-outline-secondary me-2">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                  @if (isLoading) {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    Saving...
+                  } @else {
+                    Save Changes
+                  }
+                </button>
+              </div>
+            </form>
+          }
+          <!-- Просмотр данных -->
+          @else {
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <h5>Address</h5>
+                <p class="lead">
+                  {{ house.street }} {{ house.number }}, 
+                  {{ house.city }}, {{ house.country }}
+                </p>
+                <p><strong>Postal Code:</strong> {{ house.postalCode }}</p>
+              </div>
+            </div>
+          }
+  
+          <!-- Список квартир -->
+          <h4 class="mb-3">Apartments</h4>
+          
+          @if (house.apartments && house.apartments.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Number</th>
+                    <th>Floor</th>
+                    <th>Population</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (apartment of house.apartments; track apartment.id) {
+                    <tr (click)="navigateToApartment(apartment.id)" style="cursor: pointer;">
+                      <td>{{ apartment.number }}</td>
+                      <td>{{ apartment.floor }}</td>
+                      <td>{{ apartment.population }}</td>
+                      <td>
+                        <button *appHasRole="['Manager']" (click)="openDeleteModal(apartment.id); $event.stopPropagation()" class="btn btn-sm btn-danger">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <!-- Модальное окно удаления -->
+              @if (showDeleteModal) {
+                <div class="modal-backdrop fade show"></div>
+                <div class="modal fade show d-block" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
+                      </div>
+                      <div class="modal-body">
+                        <p>Are you sure you want to delete this house?</p>
+                        <p>This action cannot be undone.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button (click)="closeDeleteModal()" class="btn btn-secondary">
+                          Cancel
+                        </button>
+                        <button (click)="confirmDelete()" class="btn btn-danger">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="alert alert-info">
+              No apartments found in this house
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>

@@ -1,0 +1,21 @@
+## .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+## Secrets — не коммитить (для реального проекта раскомментировать)
+# appsettings.Production.json
+
+## Publish output
+publish/
+
+## IDE
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,75 @@
+<div class="container mt-4">
+    <h2>Add New Resident</h2>
+    <form (ngSubmit)="createResident()">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">First Name*</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="newResident.firstName" name="firstName" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Last Name*</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="newResident.lastName" name="lastName" required>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Personal Code*</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="newResident.personalCode" name="personalCode" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Date of Birth*</label>
+            <input type="date" class="form-control" 
+                   [(ngModel)]="newResident.dateOfBirth" name="dateOfBirth" required>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Phone*</label>
+            <input type="tel" class="form-control" 
+                   [(ngModel)]="newResident.phone" name="phone" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Email*</label>
+            <input type="email" class="form-control" 
+                   [(ngModel)]="newResident.email" name="email">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Password*</label>
+            <input type="password" class="form-control" 
+                   [(ngModel)]="newResident.password" name="password">
+          </div>
+        </div>
+      </div>
+  
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" 
+               [(ngModel)]="newResident.isOwner" name="isOwner">
+        <label class="form-check-label">Is Owner</label>
+      </div>
+  
+      <input type="hidden" [(ngModel)]="newResident.apartmentId" name="apartmentId">
+  
+      <button type="submit" class="btn btn-primary">Add Resident</button>
+      <button type="button" (click)="cancel()" class="btn btn-outline-secondary ms-2">
+        Cancel
+      </button>
+    </form>
+  </div>

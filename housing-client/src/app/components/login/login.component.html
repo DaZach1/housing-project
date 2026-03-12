@@ -1,0 +1,41 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-center">Login</h3>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" formControlName="email">
+                @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                  <div class="text-danger">
+                    Valid email is required
+                  </div>
+                }
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+                @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                  <div class="text-danger">
+                    Password is required
+                  </div>
+                }
+              </div>
+              @if (errorMessage) {
+                <div class="alert alert-danger">
+                  {{ errorMessage }}
+                </div>
+              }
+              <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

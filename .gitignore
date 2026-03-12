@@ -1,0 +1,18 @@
+# .NET
+HousingAPI2/HousingAPI/bin/
+HousingAPI2/HousingAPI/obj/
+HousingAPI2/publish/
+HousingAPI2/.vs/
+*.user
+*.suo
+
+# Node / Angular
+housing-client/node_modules/
+housing-client/dist/
+housing-client/.angular/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

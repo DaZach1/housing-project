@@ -1,0 +1,196 @@
+<div class="container mt-4">
+  @if (isLoading) {
+    <div class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  @if (error && !isLoading) {
+    <div class="alert alert-danger">
+      {{ error }}
+      <a routerLink="/all-houses" class="alert-link">Back to list</a>
+    </div>
+  }
+
+  @if (apartment && !isLoading && !error) {
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+          @if (isEditMode) {
+            Edit Apartment
+          } @else {
+            Apartment Details
+          }
+        </h2>
+        <div>
+          <button *appHasRole="['Manager']" [routerLink]="['/apartment', apartment.id, 'resident', 'create']" 
+                  class="btn btn-primary me-2">
+            Add Resident
+          </button>
+          @if (!isEditMode) {
+            <button *appHasRole="['Manager']" (click)="toggleEditMode()" class="btn btn-primary me-2">
+              Edit
+            </button>
+          }
+          <a [routerLink]="['/house', apartment.houseId]" class="btn btn-outline-secondary">
+            Back to House
+          </a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        @if (isEditMode) {
+          <form (ngSubmit)="saveChanges()">
+            <div class="row mb-4">
+              <h4>Apartment Info</h4>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Number*</label>
+                  <input type="number" class="form-control" 
+                        [(ngModel)]="editedApartment.number" 
+                        name="number" required min="1">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Floor*</label>
+                  <input type="number" class="form-control" 
+                        [(ngModel)]="editedApartment.floor" 
+                        name="floor" required min="0">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Rooms*</label>
+                  <input type="number" class="form-control" 
+                        [(ngModel)]="editedApartment.roomCount" 
+                        name="roomCount" required min="1">
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <h4>Area</h4>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Total Area (m²)*</label>
+                  <input type="number" step="0.01" class="form-control" 
+                        [(ngModel)]="editedApartment.totalArea" 
+                        name="totalArea" required min="0">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Living Area (m²)*</label>
+                  <input type="number" step="0.01" class="form-control" 
+                        [(ngModel)]="editedApartment.livingArea" 
+                        name="livingArea" required min="0">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Population*</label>
+                  <input type="number" class="form-control" 
+                        [(ngModel)]="editedApartment.population" 
+                        name="population" required min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" (click)="toggleEditMode()" class="btn btn-outline-secondary me-2">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  Saving...
+                } @else {
+                  Save Changes
+                }
+              </button>
+            </div>
+          </form>
+        } @else {
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h4>Apartment Info</h4>
+              <p><strong>Number:</strong> {{ apartment.number }}</p>
+              <p><strong>Floor:</strong> {{ apartment.floor }}</p>
+              <p><strong>Rooms:</strong> {{ apartment.roomCount }}</p>
+            </div>
+            <div class="col-md-6">
+              <h4>Area</h4>
+              <p><strong>Total Area:</strong> {{ apartment.totalArea }} m²</p>
+              <p><strong>Living Area:</strong> {{ apartment.livingArea }} m²</p>
+              <p><strong>Population:</strong> {{ apartment.population }}</p>
+            </div>
+          </div>
+        }
+
+        <h4 class="mb-3">Residents</h4>
+        
+        @if (apartment.residents && apartment.residents.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>Personal Code</th>
+                  <th>Phone</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (resident of apartment.residents; track resident.id) {
+                  <tr (click)="navigateToResident(resident.id)" style="cursor: pointer;">
+                    <td>{{ resident.firstName }} {{ resident.lastName }}</td>
+                    <td>{{ resident.personalCode }}</td>
+                    <td>{{ resident.phone }}</td>
+                    <td>
+                      <button *appHasRole="['Manager']" (click)="openDeleteModal(resident.id); $event.stopPropagation()" 
+                              class="btn btn-sm btn-danger">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">
+            No residents found in this apartment
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (showDeleteModal) {
+      <div class="modal-backdrop fade show"></div>
+      <div class="modal fade show d-block" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm Deletion</h5>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete this resident?</p>
+              <p>This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+              <button (click)="closeDeleteModal()" class="btn btn-secondary">
+                Cancel
+              </button>
+              <button (click)="confirmDelete()" class="btn btn-danger">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

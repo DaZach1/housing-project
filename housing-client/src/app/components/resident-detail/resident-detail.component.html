@@ -1,0 +1,134 @@
+<div class="container mt-4">
+    @if (isLoading) {
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+  
+    @if (error && !isLoading) {
+      <div class="alert alert-danger">
+        {{ error }}
+        <a [routerLink]="['/apartment', resident?.apartmentId]" class="alert-link">
+          Back to apartment
+        </a>
+      </div>
+    }
+  
+    @if (resident && !isLoading && !error) {
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="mb-0">
+            @if (isEditMode) {
+              Edit Resident
+            } @else {
+              Resident Details
+            }
+          </h2>
+          <div>
+            @if (!isEditMode) {
+              <button (click)="toggleEditMode()" class="btn btn-primary me-2">
+                Edit
+              </button>
+            }
+            <a [routerLink]="['/apartment', resident.apartmentId]" class="btn btn-outline-secondary">
+              Back to apartment
+            </a>
+          </div>
+        </div>
+  
+        <div class="card-body">
+          @if (isEditMode) {
+            <form (ngSubmit)="saveChanges()">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" 
+                           [(ngModel)]="editedResident!.firstName" name="firstName" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" 
+                           [(ngModel)]="editedResident!.lastName" name="lastName" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Personal Code</label>
+                    <input type="text" class="form-control" 
+                           [(ngModel)]="editedResident!.personalCode" name="personalCode" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Birth Date</label>
+                    <input type="date" class="form-control" 
+                           [(ngModel)]="editedResident!.dateOfBirth" name="dateOfBirth" required>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" 
+                           [(ngModel)]="editedResident!.phone" name="phone" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" 
+                           [(ngModel)]="editedResident!.email" name="email" required>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" 
+                       [(ngModel)]="editedResident!.isOwner" name="isOwner" id="isOwner">
+                <label class="form-check-label" for="isOwner">Is Owner</label>
+              </div>
+  
+              <div class="d-flex justify-content-end">
+                <button type="button" (click)="toggleEditMode()" class="btn btn-outline-secondary me-2">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                  @if (isLoading) {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    Saving...
+                  } @else {
+                    Save Changes
+                  }
+                </button>
+              </div>
+            </form>
+          }
+          @else {
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <h5>Personal Info</h5>
+                <p><strong>Name:</strong> {{ resident.firstName }} {{ resident.lastName }}</p>
+                <p><strong>Personal Code:</strong> {{ resident.personalCode }}</p>
+                <p><strong>Birth Date:</strong> {{ resident.dateOfBirth | date }}</p>
+              </div>
+              <div class="col-md-6">
+                <h5>Contact Info</h5>
+                <p><strong>Phone:</strong> {{ resident.phone }}</p>
+                <p><strong>Email:</strong> {{ resident.email }}</p>
+                <p><strong>Status:</strong> {{ resident.isOwner ? 'Owner' : 'Tenant' }}</p>
+              </div>
+            </div>
+            <div class="alert alert-info">
+              <strong>Apartment:</strong> 
+              <a [routerLink]="['/apartment', resident.apartmentId]">
+                View apartment #{{ resident.apartmentNumber || resident.apartmentId }}
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>

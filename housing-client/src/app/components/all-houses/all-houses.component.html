@@ -1,0 +1,80 @@
+
+<div class="container mt-4">
+    <h2>All Houses</h2>
+    <button *appHasRole="['Manager']" [routerLink]="['/house_create']" class="btn btn-primary me-2">
+      New house
+  </button>
+  <button (click)="navigateToLogin()" class="btn btn-outline-secondary">
+    Back to login
+</button>
+    @if (isLoading) {
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+  
+    @if (!isLoading && houses.length > 0) {
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Street</th>
+            <th>Number</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Postal Code</th>
+            <th>Action</th> 
+          </tr>
+        </thead>
+        <tbody>
+          @for (house of houses; track house.id) {
+            <tr>
+              <td [routerLink]="['/house', house.id]" style="cursor: pointer;">{{ house.street }}</td>
+              <td [routerLink]="['/house', house.id]" style="cursor: pointer;">{{ house.number }}</td>
+              <td [routerLink]="['/house', house.id]" style="cursor: pointer;">{{ house.city }}</td>
+              <td [routerLink]="['/house', house.id]" style="cursor: pointer;">{{ house.country }}</td>
+              <td [routerLink]="['/house', house.id]" style="cursor: pointer;">{{ house.postalCode }}</td>
+              <td>
+                <button *appHasRole="['Manager']" (click)="openDeleteModal(house.id); $event.stopPropagation()" class="btn btn-sm btn-danger">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    
+      <!-- Модальное окно удаления -->
+      @if (showDeleteModal) {
+        <div class="modal-backdrop fade show"></div>
+        <div class="modal fade show d-block" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this house?</p>
+                <p>This action cannot be undone.</p>
+              </div>
+              <div class="modal-footer">
+                <button (click)="closeDeleteModal()" class="btn btn-secondary">
+                  Cancel
+                </button>
+                <button (click)="confirmDelete()" class="btn btn-danger">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  
+    @if (!isLoading && houses.length === 0) {
+      <div class="alert alert-warning">
+        No houses found
+      </div>
+    }
+  </div>

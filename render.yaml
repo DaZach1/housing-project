@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: housingapi-backend
+    runtime: docker
+    dockerfilePath: ./HousingAPI2/Dockerfile
+    dockerContext: ./HousingAPI2
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: PORT
+        value: "10000"
+  - type: web
+    name: housingapi-frontend
+    runtime: static
+    buildCommand: cd housing-client && npm install && npx ng build --configuration production
+    staticPublishPath: housing-client/dist/housing-client/browser
+    plan: free
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
