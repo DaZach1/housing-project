@@ -1,9 +1,7 @@
-housing-client/node_modules
-housing-client/dist
-housing-client/.angular
-HousingAPI2/HousingAPI/bin
-HousingAPI2/HousingAPI/obj
-HousingAPI2/publish
-HousingAPI2/.vs
+housing-client/
+**/bin/
+**/obj/
+**/publish/
+**/.vs/
 **/*.user
 .git
