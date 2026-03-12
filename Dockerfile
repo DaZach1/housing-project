@@ -6,7 +6,6 @@ WORKDIR /src
 COPY ["HousingAPI2/HousingAPI/HousingAPI.csproj", "HousingAPI/"]
 RUN dotnet restore "HousingAPI/HousingAPI.csproj"
 COPY HousingAPI2/HousingAPI/ ./HousingAPI/
-COPY HousingAPI2/HousingAPI.sln ./
 WORKDIR "/src/HousingAPI"
 RUN dotnet build "HousingAPI.csproj" -c Release -o /app/build
 
