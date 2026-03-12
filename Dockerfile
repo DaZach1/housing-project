@@ -5,7 +5,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["HousingAPI2/HousingAPI/HousingAPI.csproj", "HousingAPI/"]
 RUN dotnet restore "HousingAPI/HousingAPI.csproj"
-COPY HousingAPI2/ .
+COPY HousingAPI2/HousingAPI/ ./HousingAPI/
+COPY HousingAPI2/HousingAPI.sln ./
 WORKDIR "/src/HousingAPI"
 RUN dotnet build "HousingAPI.csproj" -c Release -o /app/build
 
